@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [scrollWidth, setScrollWidth] = useState(0);
+
+    const handleScroll = () => {
+        const scrollY = window.scrollY;
+        const scrollHeight = document.body.scrollHeight;
+        const innerHeight = window.innerHeight;
+        const percentage = (scrollY / (scrollHeight - innerHeight)) * 100;
+        setScrollWidth(percentage);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    return (
+        <div>
+            <div className="scrollbar" style={{ width: `${scrollWidth}%` }}></div>
+            <div className="container">
+                {Array.from({ length: 50 }, (_, i) => (
+                    <div className="cards" key={i}>{i + 1}</div>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 export default App;
